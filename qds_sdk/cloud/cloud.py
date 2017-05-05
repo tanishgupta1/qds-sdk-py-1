@@ -17,6 +17,9 @@ class Cloud:
         elif cloud == "oracle_bmc":
             import qds_sdk.cloud.oracle_bmc_cloud
             return qds_sdk.cloud.oracle_bmc_cloud.OracleBmcCloud()
+        elif cloud == "oracle_opc":
+            import qds_sdk.cloud.oracle_opc_cloud
+            return qds_sdk.cloud.oracle_opc_cloud.OracleOpcCloud()
         else:
             import qds_sdk.cloud.aws_cloud
             return qds_sdk.cloud.aws_cloud.AwsCloud()

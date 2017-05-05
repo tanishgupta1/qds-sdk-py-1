@@ -519,7 +519,7 @@ def main():
 
     optparser.add_option("--cloud", dest="cloud",
                          default=os.getenv('QDS_CLOUD'),
-                         help="cloud", choices=["AWS", "AZURE", "ORACLE_BMC"])
+                         help="cloud", choices=["AWS", "AZURE", "ORACLE_BMC", "ORACLE_OPC"])
 
     optparser.add_option("-v", dest="verbose", action="store_true",
                          default=False,

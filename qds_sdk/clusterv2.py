@@ -86,7 +86,8 @@ class ClusterCmdLine:
                                       disk_size=arguments.size,
                                       upscaling_config=arguments.upscaling_config,
                                       enable_encryption=arguments.encrypted_ephemerals,
-                                      customer_ssh_key=customer_ssh_key)
+                                      customer_ssh_key=customer_ssh_key,
+                                      image_uri_overrides=arguments.image_uri_overrides)
 
         #  This will set cloud config settings
         cloud_config = Cloud.get_cloud_object()
@@ -168,7 +169,8 @@ class ClusterInfoV2(object):
                          enable_encryption=None,
                          customer_ssh_key=None,
                          cluster_name=None,
-                         force_tunnel=None):
+                         force_tunnel=None,
+                         image_uri_overrides=None):
         """
         Args:
 
@@ -247,7 +249,8 @@ class ClusterInfoV2(object):
                 `datadog_api_token` : Specify the Datadog API token to use the Datadog monitoring service
 
                 `datadog_app_token` : Specify the Datadog APP token to use the Datadog monitoring service
-
+                
+                `image_uri_overrides` : Override the image name provided
 
         Doc: For getting details about arguments
         http://docs.qubole.com/en/latest/rest-api/cluster_api/create-new-cluster.html#parameters
@@ -288,6 +291,9 @@ class ClusterInfoV2(object):
             self.cluster_info['datadisk']['upscaling_config'] = upscaling_config
             self.cluster_info['datadisk']['encryption'] = enable_encryption
 
+        def set_internal():
+            self.internal['image_uri_overrides'] = image_uri_overrides
+
 
         self.cluster_info['master_instance_type'] = master_instance_type
         self.cluster_info['slave_instance_type'] = slave_instance_type
@@ -315,6 +321,7 @@ class ClusterInfoV2(object):
         set_data_disk()
         set_monitoring()
         set_data_disk()
+        set_internal()
 
     @staticmethod
     def cluster_info_parser(argparser, action):
@@ -505,6 +512,12 @@ class ClusterInfoV2(object):
                                    dest="datadog_app_token",
                                    default=None,
                                    help="overrides for airflow cluster", )
+
+        internal_group = argparser.add_argument_group("internal settings")
+        internal_group.add_argument("--image-overrides",
+                                   dest="image_uri_overrides",
+                                   default=None,
+                                   help="overrides for image", )
 
 
 class ClusterV2(Resource):
